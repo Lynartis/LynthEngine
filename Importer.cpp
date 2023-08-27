@@ -109,8 +109,7 @@ void Importer::Import(entt::registry& registry)
 
 
     MaterialComponent llunaMaterialComponent("llunetaOpaque", tex, shaderProgram);
-    MaterialComponent gizmoMaterialComponent("GizmoOpaque", tex, lightShader);
-    MaterialComponent robotMaterialComponent("robotOpaque", tex2, shaderProgram);
+    MaterialComponent robotMaterialComponent("matildaOpaque", tex2, shaderProgram);
     MaterialComponent robotMaterialComponent2("robotOpaque2", tex2, lightShader);
 
 // ---------------------------MODEL COMPONENT -----------------------------------------
@@ -118,7 +117,7 @@ void Importer::Import(entt::registry& registry)
  //   Model modelLunna;
     ModelComponent llunaModelComponent(ModelImporter(texPath + "test.obj"));
     ModelComponent robotModelComponent(ModelImporter(texPath + "matilda.obj"));
-    ModelComponent GizmoModelComponent(ModelImporter(texPath + "Gizmov1.obj"));
+ 
 
 
     entt::entity entity2 = registry.create();
@@ -129,13 +128,6 @@ void Importer::Import(entt::registry& registry)
 
    
    
-        // Create an entity
-    entt::entity entity = registry.create();
-
-    // Assign the components to the entity
-    registry.emplace<TransformComponent>(entity, llunatransformComponent);
-    registry.emplace<MaterialComponent>(entity, gizmoMaterialComponent);
-    registry.emplace<ModelComponent>(entity, GizmoModelComponent);
 
 
 
@@ -154,14 +146,7 @@ void Importer::Import(entt::registry& registry)
     registry.emplace<MaterialComponent>(entity4, robotMaterialComponent2);
     registry.emplace<ModelComponent>(entity4, llunaModelComponent);
 
-     entt::entity entity5 = registry.create();
 
-    // Assign the components to the entity
-    registry.emplace<TransformComponent>(entity5, llunatransformComponent);
-    registry.emplace<MaterialComponent>(entity5, gizmoMaterialComponent);
-    registry.emplace<ModelComponent>(entity5, GizmoModelComponent);
-   
-   
    
  
 

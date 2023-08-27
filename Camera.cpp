@@ -12,8 +12,7 @@ Camera::Camera(int width, int height, glm::vec3 position)
 void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane)
 {
 	// Initializes matrices since otherwise they will be the null matrix
-	glm::mat4 view = glm::mat4(1.0f);
-	glm::mat4 projection = glm::mat4(1.0f);
+
 
 	// Makes camera look in the right direction from the right position
 	view = glm::lookAt(Position, Position + Orientation, Up);
@@ -30,6 +29,13 @@ void Camera::Matrix(Shader& shader, const char* uniform)
 	glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
 }
 
+glm::mat4 Camera::GetProjectionMatrix(float FOVdeg, float nearPlane, float farPlane) {
+	
+
+	projection = glm::perspective(glm::radians(FOVdeg), (float)width / height, nearPlane, farPlane) * unitsScale;
+
+	return projection;
+}
 
 
 void Camera::Inputs(GLFWwindow* window , float deltaTime)

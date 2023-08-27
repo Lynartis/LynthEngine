@@ -5,6 +5,8 @@ namespace fs = std::filesystem;
 #include"imgui.h"
 #include"imgui_impl_glfw.h"
 #include"imgui_impl_opengl3.h"
+#include "imgui/imGuizmo/ImGuizmo.h"
+// #include "imgui/imGuizmo/ImGuizmo.cpp"
 
 #include<iostream>
 #include<glm/glm.hpp>
@@ -183,6 +185,20 @@ int main()
 
 
 
+	glm::vec3 gyzmoPosition = glm::vec3(0.0f, 0.0, 0.0f);
+
+	// Create the object's transformation matrix
+	glm::mat4 objectMatrix = glm::mat4(1.0f); // Start with the identity matrix
+
+	// Apply translation
+	objectMatrix = glm::translate(objectMatrix, gyzmoPosition);
+
+
+
+
+
+
+
 
 //RENDER SYSTEM
 	RenderSystem renderer;
@@ -271,6 +287,51 @@ int main()
 			grid.Draw(camera, 2.0f);
 			grid2.Draw(camera, 1.0f);
 
+		
+
+			//------IMGUIZMO TEST ----------
+
+
+		
+			ImGuizmo::BeginFrame();
+
+			// Get the camera's view and projection matrices
+			const glm::mat4 viewMatrix = camera.view;
+			const glm::mat4 projectionMatrix = camera.projection;
+
+		
+			//Matilda test
+			auto viewGyzmo = registry.view<MaterialComponent, TransformComponent>();
+
+			for (entt::entity entity : viewGyzmo) {
+				MaterialComponent& materialComp = view.get<MaterialComponent>(entity);
+				TransformComponent& transformComp = view.get<TransformComponent>(entity);
+
+
+				if (materialComp.materialID == "matildaOpaque") {
+
+					// Draw translation, rotation, and scaling gizmos
+					ImGuizmo::SetOrthographic(false); // Set to true for orthographic view
+					//ImGuizmo::SetDrawlist();
+
+					ImGuizmo::SetRect(0, 0, width, height);
+
+					ImGuizmo::Manipulate(glm::value_ptr(viewMatrix), glm::value_ptr(projectionMatrix),
+						ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, glm::value_ptr(transformComp.modelMatrix));
+
+				}
+
+			}
+
+	
+
+		
+
+
+		
+			
+			
+			
 			//--------IMGUI-----------
 
 
