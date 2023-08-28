@@ -6,7 +6,7 @@ namespace fs = std::filesystem;
 #include"imgui_impl_glfw.h"
 #include"imgui_impl_opengl3.h"
 #include "imgui/imGuizmo/ImGuizmo.h"
-// #include "imgui/imGuizmo/ImGuizmo.cpp"
+
 
 #include<iostream>
 #include<glm/glm.hpp>
@@ -21,6 +21,7 @@ namespace fs = std::filesystem;
 #include"RenderSystem.h"
 #include"Importer.h"
 #include"HotReloadSystem.h"
+#include"Gizmo.h"
 
 #include<filewatch/FileWatch.hpp>
 
@@ -125,22 +126,17 @@ int main()
 		glUniform1f(glGetUniformLocation(material.shaderProgram.ID, "lightIntensity"), lightIntensity);
 
 
-	//	std::cout << "Set the GL uniforms: " << std::endl;
-	//	std::cout << lightIntensity << std::endl;
-
 	}
-
-
 
 
 	//Enables the Depth Buffer:
 	glEnable(GL_DEPTH_TEST);
 
-
 	//Camera Object:
 	Camera camera(width, height, glm::vec3(0.0f, 200.0f, 500.0f));
 
-
+	//Gizmo Object;
+	Gizmo gizmo(true);
 
 	//IMGUI
 	IMGUI_CHECKVERSION();
@@ -194,6 +190,26 @@ int main()
 	objectMatrix = glm::translate(objectMatrix, gyzmoPosition);
 
 
+
+
+	//SELECT ENTITY TO DRAW GIZMO
+
+	entt::entity selectedEntity;
+
+	auto view2 = registry.view<MaterialComponent>();
+
+	// Iterate over the entities and perform actions
+	for (const auto entity : view2) {
+
+		MaterialComponent& material = registry.get<MaterialComponent>(entity);
+
+
+		if (material.materialID == "matildaOpaque")
+		{
+			selectedEntity = entity;
+
+		}
+	}
 
 
 
@@ -252,17 +268,13 @@ int main()
 
 		}
 
-
+		
 	
-
-
 			//-----Background Color:-------
 				// Specify the color of the background		
 			glClearColor(color[0], color[1], color[2], 1.0f);
 			// Clean the back buffer and assign the new color to it
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-			//-----IMGUI----
 
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
@@ -276,56 +288,44 @@ int main()
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			}
 
-			//-----Camera--------
+			//----CAMERA----
 			camera.Inputs(window, time.DeltaTime());
 			camera.updateMatrix(cameraPov, 0.01f, 500.0f);
 
-	
-
+			//----RENDER SYSTEM----
 			renderer.Draw(registry, camera);
 
-			grid.Draw(camera, 2.0f);
-			grid2.Draw(camera, 1.0f);
-
-		
-
-			//------IMGUIZMO TEST ----------
+			
 
 
-		
-			ImGuizmo::BeginFrame();
+			//----IMGUIZMOTEST----
 
-			// Get the camera's view and projection matrices
-			const glm::mat4 viewMatrix = camera.view;
-			const glm::mat4 projectionMatrix = camera.projection;
+			gizmo.GizmoInputs(window);
 
-		
-			//Matilda test
-			auto viewGyzmo = registry.view<MaterialComponent, TransformComponent>();
-
-			for (entt::entity entity : viewGyzmo) {
-				MaterialComponent& materialComp = view.get<MaterialComponent>(entity);
-				TransformComponent& transformComp = view.get<TransformComponent>(entity);
+		//	std::cout << "Gyzmo is: " << gizmo.isActive << std::endl;
+				//-----IMGUI----
+			if (gizmo.isActive) 
+			{
+				grid.Draw(camera, 2.0f);
+				grid2.Draw(camera, 1.0f);
 
 
-				if (materialComp.materialID == "matildaOpaque") {
+				ImGuizmo::BeginFrame();
 
-					// Draw translation, rotation, and scaling gizmos
-					ImGuizmo::SetOrthographic(false); // Set to true for orthographic view
-					//ImGuizmo::SetDrawlist();
+				// Get the camera's view and projection matrices
+				const glm::mat4 viewMatrix = camera.view;
+				const glm::mat4 projectionMatrix = camera.projection;
+				
+			
+				
+				gizmo.GizmoDraw(registry, selectedEntity, width, height, viewMatrix, projectionMatrix);
 
-					ImGuizmo::SetRect(0, 0, width, height);
 
-					ImGuizmo::Manipulate(glm::value_ptr(viewMatrix), glm::value_ptr(projectionMatrix),
-						ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, glm::value_ptr(transformComp.modelMatrix));
-
-				}
 
 			}
-
-	
-
 		
+		
+			
 
 
 		
@@ -338,16 +338,15 @@ int main()
 			if (ImGui::BeginMainMenuBar())
 			{
 				// Create a menu item
-				if (ImGui::BeginMenu("Transforms"))
+				if (ImGui::BeginMenu("File"))
 				{
 
-					ImGui::MenuItem("Mesh");
-					//	ImGui::InputFloat3("v", &lightPos[0]);
-
-					//	ImGui::DragFloat3("Position", &pyramidPos[0], 0.01f);
-
-
-					//	ImGui::DragFloat("Intensity", &scaleFactor, 0.01f);
+					if (ImGui::Button("SAVE")) {
+						//		DO SAVE STUFF
+					}
+					if (ImGui::Button("LOAD")) {
+						//		DO SAVE STUFF
+					}
 
 					ImGui::EndMenu();
 				}
@@ -412,6 +411,79 @@ int main()
 					ImGui::EndMenu();
 				}
 
+				if (ImGui::BeginMenu("Objects"))
+				{
+					
+					if (ImGui::Button("Matilda")) {
+						
+						auto view2 = registry.view<MaterialComponent>();
+
+						// Iterate over the entities and perform actions
+						for (const auto entity : view2) {
+
+							MaterialComponent& material = registry.get<MaterialComponent>(entity);
+
+
+							if (material.materialID == "matildaOpaque")
+							{
+								selectedEntity = entity;
+
+							}
+						}
+
+
+					}
+
+					if (ImGui::Button("llunetaOpaque")) {
+
+						auto view2 = registry.view<MaterialComponent>();
+
+						// Iterate over the entities and perform actions
+						for (const auto entity : view2) {
+
+							MaterialComponent& material = registry.get<MaterialComponent>(entity);
+
+
+							if (material.materialID == "llunetaOpaque")
+							{
+								selectedEntity = entity;
+
+							}
+						}
+
+
+					}
+					if (ImGui::Button("robotOpaque2")) {
+
+						auto view2 = registry.view<MaterialComponent>();
+
+						// Iterate over the entities and perform actions
+						for (const auto entity : view2) {
+
+							MaterialComponent& material = registry.get<MaterialComponent>(entity);
+
+
+							if (material.materialID == "robotOpaque2")
+							{
+								selectedEntity = entity;
+
+							}
+						}
+
+
+					}
+
+
+
+
+
+
+			
+
+
+					// End the "Edit" menu
+					ImGui::EndMenu();
+				}
 
 
 

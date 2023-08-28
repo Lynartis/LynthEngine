@@ -40,45 +40,47 @@ glm::mat4 Camera::GetProjectionMatrix(float FOVdeg, float nearPlane, float farPl
 
 void Camera::Inputs(GLFWwindow* window , float deltaTime)
 {
-	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) != GLFW_PRESS)
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
 	{
-		cameraSpeed = speed;
-	}
+		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) != GLFW_PRESS)
+		{
+			cameraSpeed = speed;
+		}
 
-	// Handles key inputs
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-	{
-		Position += cameraSpeed * Orientation * deltaTime ;
+		// Handles key inputs
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		{
+			Position += cameraSpeed * Orientation * deltaTime;
+		}
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		{
+			Position += cameraSpeed * -glm::normalize(glm::cross(Orientation, Up)) * deltaTime;
+		}
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		{
+			Position += cameraSpeed * -Orientation * deltaTime;
+		}
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		{
+			Position += cameraSpeed * glm::normalize(glm::cross(Orientation, Up)) * deltaTime;
+		}
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+		{
+			Position += cameraSpeed * Up * deltaTime;
+		}
+		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+		{
+			Position += cameraSpeed * -Up * deltaTime;
+		}
+		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+		{
+			cameraSpeed = 600.0f;
+		}
+		else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
+		{
+			cameraSpeed = speed;
+		}
 	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-	{
-		Position += cameraSpeed * -glm::normalize(glm::cross(Orientation, Up)) * deltaTime;
-	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-	{
-		Position += cameraSpeed * -Orientation * deltaTime;
-	}
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-	{
-		Position += cameraSpeed * glm::normalize(glm::cross(Orientation, Up)) * deltaTime;
-	}
-	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-	{
-		Position += cameraSpeed * Up * deltaTime;
-	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-	{
-		Position += cameraSpeed * -Up * deltaTime;
-	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-	{
-		cameraSpeed = 600.0f;
-	}
-	else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
-	{
-		cameraSpeed = speed;
-	}
-
 	
 	// Handles mouse inputs
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)

@@ -120,31 +120,37 @@ void Importer::Import(entt::registry& registry)
  
 
 
-    entt::entity entity2 = registry.create();
+    entt::entity entity1 = registry.create();
 
-    registry.emplace<TransformComponent>(entity2, robottransformComponent);
-    registry.emplace<MaterialComponent>(entity2, robotMaterialComponent);
-    registry.emplace<ModelComponent>(entity2, robotModelComponent);
+    registry.emplace<TransformComponent>(entity1, robottransformComponent);
+    registry.emplace<MaterialComponent>(entity1, robotMaterialComponent);
+    registry.emplace<ModelComponent>(entity1, robotModelComponent);
 
-   
+    // Create an entity
+    entt::entity entity5 = registry.create();
+
+    // Assign the components to the entity
+    registry.emplace<TransformComponent>(entity5, llunatransformComponent);
+    registry.emplace<MaterialComponent>(entity5, llunaMaterialComponent);
+    registry.emplace<ModelComponent>(entity5, llunaModelComponent);
    
 
 
 
     // Create an entity
+    entt::entity entity2 = registry.create();
+
+    // Assign the components to the entity
+    registry.emplace<TransformComponent>(entity2, llunatransformComponent2);
+    registry.emplace<MaterialComponent>(entity2, llunaMaterialComponent);
+    registry.emplace<ModelComponent>(entity2, llunaModelComponent);
+
     entt::entity entity3 = registry.create();
 
     // Assign the components to the entity
-    registry.emplace<TransformComponent>(entity3, llunatransformComponent2);
-    registry.emplace<MaterialComponent>(entity3, llunaMaterialComponent);
+    registry.emplace<TransformComponent>(entity3, robottransformComponent2);
+    registry.emplace<MaterialComponent>(entity3, robotMaterialComponent2);
     registry.emplace<ModelComponent>(entity3, llunaModelComponent);
-
-    entt::entity entity4 = registry.create();
-
-    // Assign the components to the entity
-    registry.emplace<TransformComponent>(entity4, robottransformComponent2);
-    registry.emplace<MaterialComponent>(entity4, robotMaterialComponent2);
-    registry.emplace<ModelComponent>(entity4, llunaModelComponent);
 
 
    
