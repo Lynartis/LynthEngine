@@ -22,7 +22,7 @@ namespace fs = std::filesystem;
 #include"Importer.h"
 #include"HotReloadSystem.h"
 #include"Gizmo.h"
-
+#include "framebufferRenderer.h"
 #include<filewatch/FileWatch.hpp>
 
 
@@ -129,9 +129,6 @@ int main()
 	}
 
 
-	//Enables the Depth Buffer:
-	glEnable(GL_DEPTH_TEST);
-
 	//Camera Object:
 	Camera camera(width, height, glm::vec3(0.0f, 200.0f, 500.0f));
 
@@ -213,6 +210,9 @@ int main()
 
 
 
+	framebufferRenderer framebufferRenderer(width, height);
+	
+	
 
 
 
@@ -232,10 +232,14 @@ int main()
 		//-----Time-----
 		time.RunTime();
 
+		
+		framebufferRenderer.Bind(); //After this it renders it to a texture
+		glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
+	
 
 		if (hotReload.isHotReloading) 
 		{
-
+			framebufferRenderer.frameBufferShader.reloadShaders();
 			hotReload.HotReload(registry);
 		//	std::cout << "loading works aqui " << std::endl;
 
@@ -268,13 +272,14 @@ int main()
 
 		}
 
-		
 	
 			//-----Background Color:-------
 				// Specify the color of the background		
 			glClearColor(color[0], color[1], color[2], 1.0f);
 			// Clean the back buffer and assign the new color to it
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
 
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
@@ -296,6 +301,15 @@ int main()
 			renderer.Draw(registry, camera);
 
 			
+
+
+
+
+	
+
+		
+	
+
 
 
 			//----IMGUIZMOTEST----
@@ -326,7 +340,9 @@ int main()
 		
 		
 			
+	
 
+			framebufferRenderer.Render();
 
 		
 			
@@ -496,6 +512,24 @@ int main()
 			// Renders the ImGUI elements
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+
+
+
+
+
+
+
+
+			
+
+
+
+
+
+
+
+
 
 
 

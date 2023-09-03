@@ -24,6 +24,70 @@ std::string get_file_contents(const char* filename)
 	throw std::runtime_error("Error opening file: " + filePath);
 }
 
+
+
+Shader::Shader(std::string shaderStringName)
+{
+	shaderName = shaderStringName;
+
+	// Vertex shader source code for a simple passthrough shader
+	const char* vertexSource = R"(
+		   #version 330 core
+	layout (location = 0) in vec3 aPos;
+
+	layout (location = 1) in vec3 aNormal;
+
+	layout (location = 2) in vec3 aColor;
+
+	layout (location = 3) in vec2 aTex;
+
+		out vec2 TexCoords;
+
+		void main()
+		{
+			gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0); 
+			TexCoords = aTex;
+		}
+    )";
+
+	// Fragment shader source code for a white color
+	const char* fragmentSource = R"(
+			   #version 330 core
+		out vec4 FragColor;
+  
+		in vec2 TexCoords;
+
+		uniform sampler2D screenTexture;
+
+		void main()
+		{ 
+			FragColor = texture(screenTexture, TexCoords);
+			
+		}
+    )";
+
+	// Create Vertex Shader Object and get its reference
+	vertexShader = createAndCompileShader(GL_VERTEX_SHADER, vertexSource);
+
+	// Create Fragment Shader Object and get its reference
+	fragmentShader = createAndCompileShader(GL_FRAGMENT_SHADER, fragmentSource);
+
+	// Create Shader Program Object and get its reference
+	ID = glCreateProgram();
+
+	// Attach the Vertex and Fragment Shaders to the Shader Program
+	glAttachShader(ID, vertexShader);
+	glAttachShader(ID, fragmentShader);
+
+	// Wrap-up/Link all the shaders together into the Shader Program
+	glLinkProgram(ID);
+
+	// Checks if Shaders linked successfully
+	compileErrors(ID, "PROGRAM");
+}
+
+
+
 // Constructor that build the Shader Program from 2 different shaders
 Shader::Shader(std::string shaderStringName, const char* vFile, const char* fragFile)
 {

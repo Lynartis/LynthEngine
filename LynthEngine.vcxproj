@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="EBO.cpp" />
+    <ClCompile Include="framebufferRenderer.cpp" />
     <ClCompile Include="Gizmo.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Grid.cpp" />
@@ -181,8 +182,6 @@
     <ClCompile Include="VBO.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="error.frag" />
-    <None Include="error.vert" />
     <None Include="Resources\Shaders\default.frag" />
     <None Include="Resources\Shaders\default.vert" />
     <None Include="Resources\Shaders\error.frag" />
@@ -191,10 +190,13 @@
     <None Include="Resources\Shaders\grid.vert" />
     <None Include="Resources\Shaders\light.frag" />
     <None Include="Resources\Shaders\light.vert" />
+    <None Include="Resources\Shaders\postprocessShader.frag" />
+    <None Include="Resources\Shaders\postprocessShader.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="EBO.h" />
+    <ClInclude Include="framebufferRenderer.h" />
     <ClInclude Include="Gizmo.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="HotReloadSystem.h" />

@@ -24,6 +24,10 @@ public:
 
 	// Constructor that build the Shader Program from 2 different shaders
 	Shader(std::string shaderName, const char* vertexFile, const char* fragmentFile);
+	//constructor to build default white shader
+	Shader(std::string shaderStringName);
+
+
 	void reloadShaders();
 
 	// Activates the Shader Program

@@ -102,14 +102,11 @@
     <ClCompile Include="Gizmo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="framebufferRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="error.frag">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="error.vert">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
     <None Include="Resources\Shaders\default.frag">
       <Filter>Resource Files\Shaders</Filter>
     </None>
@@ -117,9 +114,6 @@
       <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="Resources\Shaders\error.frag">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="Resources\Shaders\error.vert">
       <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="Resources\Shaders\light.frag">
@@ -132,6 +126,15 @@
       <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="Resources\Shaders\grid.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="Resources\Shaders\error.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="Resources\Shaders\postprocessShader.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="Resources\Shaders\postprocessShader.vert">
       <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>
@@ -221,6 +224,9 @@
       <Filter>Header Files\imgui</Filter>
     </ClInclude>
     <ClInclude Include="Gizmo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="framebufferRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
