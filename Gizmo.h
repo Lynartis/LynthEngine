@@ -18,16 +18,24 @@
 
 
 #include"TransformComponent.h"
+#include"PickingComponent.h"
 
 class Gizmo
 {
 private:
-	bool controlKeyPressed = false; // Flag to track the left control key press
+	
+	ImGuizmo::OPERATION currentGuizmo = ImGuizmo::TRANSLATE;
+	bool snap = false;
+	bool boolq = true;
+//	ImGuiIO& io = ImGui::GetIO();
 
 public:
-	bool isActive = true;
+	bool isActive = false;
+	entt::entity selectedEntity;
+	
 	Gizmo(bool active);
-	void GizmoDraw(entt::registry& registry, entt::entity selected, float width, float height, glm::mat4 viewMatrix, glm::mat4 projectionMatrix);
+	void AssignGuizmo(entt::registry& registry, int selection);
+	void GizmoDraw(entt::registry& registry, float width, float height, glm::mat4 viewMatrix, glm::mat4 projectionMatrix);
 	void GizmoInputs(GLFWwindow* window);
 
 

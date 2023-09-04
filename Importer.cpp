@@ -119,12 +119,20 @@ void Importer::Import(entt::registry& registry)
     ModelComponent robotModelComponent(ModelImporter(texPath + "matilda.obj"));
  
 
+    // ---------------------------PICKING COMPONENT -----------------------------------------
+
+    PickingComponent Pick1(1);
+    PickingComponent Pick2(250);
+    PickingComponent Pick3(3469);
+    PickingComponent Pick4(45556);
+
 
     entt::entity entity1 = registry.create();
 
     registry.emplace<TransformComponent>(entity1, robottransformComponent);
     registry.emplace<MaterialComponent>(entity1, robotMaterialComponent);
     registry.emplace<ModelComponent>(entity1, robotModelComponent);
+    registry.emplace<PickingComponent>(entity1, Pick1);
 
     // Create an entity
     entt::entity entity5 = registry.create();
@@ -133,7 +141,7 @@ void Importer::Import(entt::registry& registry)
     registry.emplace<TransformComponent>(entity5, llunatransformComponent);
     registry.emplace<MaterialComponent>(entity5, llunaMaterialComponent);
     registry.emplace<ModelComponent>(entity5, llunaModelComponent);
-   
+    registry.emplace<PickingComponent>(entity5, Pick2);
 
 
 
@@ -144,14 +152,14 @@ void Importer::Import(entt::registry& registry)
     registry.emplace<TransformComponent>(entity2, llunatransformComponent2);
     registry.emplace<MaterialComponent>(entity2, llunaMaterialComponent);
     registry.emplace<ModelComponent>(entity2, llunaModelComponent);
-
+    registry.emplace<PickingComponent>(entity2, Pick3);
     entt::entity entity3 = registry.create();
 
     // Assign the components to the entity
     registry.emplace<TransformComponent>(entity3, robottransformComponent2);
     registry.emplace<MaterialComponent>(entity3, robotMaterialComponent2);
     registry.emplace<ModelComponent>(entity3, llunaModelComponent);
-
+    registry.emplace<PickingComponent>(entity3, Pick4);
 
    
  

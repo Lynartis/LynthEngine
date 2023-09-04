@@ -24,7 +24,7 @@ namespace fs = std::filesystem;
 #include"Gizmo.h"
 #include "framebufferRenderer.h"
 #include<filewatch/FileWatch.hpp>
-
+#include"PickingRenderSystem.h"
 
 const unsigned int width = 1366;
 const unsigned int height = 768;
@@ -188,26 +188,8 @@ int main()
 
 
 
-
-	//SELECT ENTITY TO DRAW GIZMO
-
-	entt::entity selectedEntity;
-
-	auto view2 = registry.view<MaterialComponent>();
-
-	// Iterate over the entities and perform actions
-	for (const auto entity : view2) {
-
-		MaterialComponent& material = registry.get<MaterialComponent>(entity);
-
-
-		if (material.materialID == "matildaOpaque")
-		{
-			selectedEntity = entity;
-
-		}
-	}
-
+	bool boolGrid = true;
+	bool controlKeyPressed = false;
 
 
 	framebufferRenderer framebufferRenderer(width, height);
@@ -219,6 +201,9 @@ int main()
 //RENDER SYSTEM
 	RenderSystem renderer;
 
+	PickingRenderSystem pickRenderer(width,height);
+	
+	bool releaseMouse = false;
 	bool rKeyPressed = false;  // Initialize the key state
 
 	// ---------------------------------------------------------------------------------------------------------
@@ -228,7 +213,11 @@ int main()
 	// ---------------------------------------------------------------------------------------------------------
 	while (!glfwWindowShouldClose(window))
 	{
+		
 
+		
+	
+	
 		//-----Time-----
 		time.RunTime();
 
@@ -303,26 +292,51 @@ int main()
 			
 
 
-
-
-	
-
-		
-	
-
-
-
 			//----IMGUIZMOTEST----
+
+
+
+
+			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) {
+				releaseMouse = false;
+			}
+
+			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !releaseMouse && !glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
+				releaseMouse = true;
+				int selection = pickRenderer.Pick(registry, camera, window);
+			
+				 gizmo.AssignGuizmo(registry, selection);
+
+			}
 
 			gizmo.GizmoInputs(window);
 
+
+
+			// Check for key presses
+			if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
+				if (!controlKeyPressed) {
+					
+					boolGrid = !boolGrid;
+					controlKeyPressed = true; // Set the flag to true
+				}
+			}
+			else {
+				//boolGrid = false;
+				controlKeyPressed = false; // Reset the flag when any of the keys is released
+			}
+
+			if (boolGrid) {
+
+				grid.Draw(camera, 2.0f);
+				grid2.Draw(camera, 1.0f);
+			}
+			
 		//	std::cout << "Gyzmo is: " << gizmo.isActive << std::endl;
 				//-----IMGUI----
 			if (gizmo.isActive) 
 			{
-				grid.Draw(camera, 2.0f);
-				grid2.Draw(camera, 1.0f);
-
+			
 
 				ImGuizmo::BeginFrame();
 
@@ -332,8 +346,8 @@ int main()
 				
 			
 				
-				gizmo.GizmoDraw(registry, selectedEntity, width, height, viewMatrix, projectionMatrix);
-
+				//gizmo.GizmoDraw(registry, selectedEntity, width, height, viewMatrix, projectionMatrix);
+				gizmo.GizmoDraw(registry, width, height, viewMatrix, projectionMatrix);
 
 
 			}
@@ -430,64 +444,9 @@ int main()
 				if (ImGui::BeginMenu("Objects"))
 				{
 					
-					if (ImGui::Button("Matilda")) {
-						
-						auto view2 = registry.view<MaterialComponent>();
-
-						// Iterate over the entities and perform actions
-						for (const auto entity : view2) {
-
-							MaterialComponent& material = registry.get<MaterialComponent>(entity);
+								
 
 
-							if (material.materialID == "matildaOpaque")
-							{
-								selectedEntity = entity;
-
-							}
-						}
-
-
-					}
-
-					if (ImGui::Button("llunetaOpaque")) {
-
-						auto view2 = registry.view<MaterialComponent>();
-
-						// Iterate over the entities and perform actions
-						for (const auto entity : view2) {
-
-							MaterialComponent& material = registry.get<MaterialComponent>(entity);
-
-
-							if (material.materialID == "llunetaOpaque")
-							{
-								selectedEntity = entity;
-
-							}
-						}
-
-
-					}
-					if (ImGui::Button("robotOpaque2")) {
-
-						auto view2 = registry.view<MaterialComponent>();
-
-						// Iterate over the entities and perform actions
-						for (const auto entity : view2) {
-
-							MaterialComponent& material = registry.get<MaterialComponent>(entity);
-
-
-							if (material.materialID == "robotOpaque2")
-							{
-								selectedEntity = entity;
-
-							}
-						}
-
-
-					}
 
 
 

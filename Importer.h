@@ -7,6 +7,7 @@
 #include"Mesh.h"
 #include"MaterialComponent.h"
 #include"ModelComponent.h"
+#include"PickingComponent.h"
 
 class Importer
 {
